@@ -359,23 +359,62 @@ function assemble(target, contributions) {
 }
 
 // ---------- 完整方案页面（solutions/system_design/*/README）----------
+let enAnchorMap = {}
+let enToZh = {} // 英文小节 slug -> { page, zhSlug }
+
+// 用当前 locale 锚点图解析主 README 锚点（中文 slug 用于 zh，英文 slug 用于 en）
+function resolveLocaleAnchor(slug) {
+  const sp = special(slug)
+  if (sp) return sp.startsWith('http') ? sp : loc(sp)
+  const entries = anchorMap[slug]
+  if (entries && entries.length) {
+    const e = entries[0]
+    const base = e.page.replace(/\.md$/, '')
+    return e.isPageTitle ? loc(base) : `${loc(base)}#${slug}`
+  }
+  return null
+}
+
+// 用英文锚点图解析仓库根/英文 README 链接；zh 页面小节转换为对应中文锚点
+function resolveEnAnchor(slug) {
+  const sp = enSpecial[slug]
+  if (sp) return sp.startsWith('http') ? sp : loc(sp)
+  const entries = enAnchorMap[slug]
+  if (entries && entries.length) {
+    const e = entries[0]
+    const base = e.page.replace(/\.md$/, '')
+    if (locale === 'en') return e.isPageTitle ? loc(base) : `${loc(base)}#${slug}`
+    if (e.isPageTitle) return loc(base)
+    const z = enToZh[slug]
+    return z ? `${loc(z.page)}#${z.zhSlug}` : loc(base)
+  }
+  return null
+}
+
 function rewriteSolutionUrl(url, pagePath) {
   const t = url.trim()
   if (/^[a-z]+:\/\//i.test(t) || t.startsWith('mailto:')) {
-    // 指回主 README 的锚点链接 → 本地主题页
-    const m = t.match(
-      /^https:\/\/github\.com\/donnemartin\/system-design-primer\/blob\/master\/README(?:-zh-Hans)?\.md#(.+)$/
+    // 仓库根链接（英文锚点）→ 本地网页
+    const mRoot = t.match(/^https:\/\/github\.com\/donnemartin\/system-design-primer#(.+)$/)
+    if (mRoot) {
+      const r = resolveEnAnchor(mRoot[1])
+      if (r) return r
+    }
+    // 中文主 README 锚点链接
+    const mZh = t.match(
+      /^https:\/\/github\.com\/donnemartin\/system-design-primer\/blob\/master\/README-zh-Hans\.md#(.+)$/
     )
-    if (m) {
-      const slug = m[1]
-      const sp = special(slug)
-      if (sp) return sp.startsWith('http') ? sp : loc(sp)
-      const entries = anchorMap[slug]
-      if (entries && entries.length) {
-        const e = entries[0]
-        const base = e.page.replace(/\.md$/, '')
-        return e.isPageTitle ? loc(base) : `${loc(base)}#${slug}`
-      }
+    if (mZh) {
+      const r = resolveLocaleAnchor(mZh[1])
+      if (r) return r
+    }
+    // 英文主 README 锚点链接
+    const mEn = t.match(
+      /^https:\/\/github\.com\/donnemartin\/system-design-primer\/blob\/master\/README\.md#(.+)$/
+    )
+    if (mEn) {
+      const r = resolveEnAnchor(mEn[1])
+      if (r) return r
     }
     return t // 其它外部链接保留
   }
@@ -385,6 +424,36 @@ function rewriteSolutionUrl(url, pagePath) {
   const m2 = t.match(/^\.\.\/([a-z_]+)\/README\.md$/)
   if (m2 && solutionMap[m2[1]]) return loc(`interview/solutions/${solutionMap[m2[1]].split('/').pop()}`)
   return t
+}
+
+// 由中英 README 的平行小节结构构建 英文slug -> 中文slug 映射
+function buildEnToZh(zhSections, enSections) {
+  const byPage = (sections, map) => {
+    const out = {}
+    for (const sec of sections) {
+      const cfg = map[sec.title]
+      if (!cfg || cfg.kind !== 'page') continue
+      const subs = []
+      for (const line of sec.lines) {
+        const m = line.match(/^(#{3,6})\s+(.+?)\s*$/)
+        if (m) subs.push(slugify(m[2]))
+      }
+      ;(out[cfg.target] ||= []).push(subs)
+    }
+    return out
+  }
+  const zh = byPage(zhSections, zhMap)
+  const en = byPage(enSections, enMap)
+  const result = {}
+  for (const page of Object.keys(zh)) {
+    const zSubs = (zh[page] || []).flat()
+    const eSubs = (en[page] || []).flat()
+    const n = Math.min(zSubs.length, eSubs.length)
+    for (let i = 0; i < n; i++) {
+      if (eSubs[i] && zSubs[i]) result[eSubs[i]] = { page, zhSlug: zSubs[i] }
+    }
+  }
+  return result
 }
 
 function rewriteSolutionLine(line, pagePath) {
@@ -419,7 +488,9 @@ function rewriteSolutionDoc(text, pagePath) {
   return out.join('\n')
 }
 
-function runSolutions(zhAnchorMap, enAnchorMap) {
+function runSolutions(zhAnchorMap, enAnchorMapArg, enToZhMap) {
+  enAnchorMap = enAnchorMapArg
+  enToZh = enToZhMap
   const generated = []
   const warnings = []
   for (const dir of Object.keys(solutionMap)) {
@@ -510,7 +581,7 @@ function runSplit(lang, sourceFile, map, interviewMap, spec) {
     generated.push(`${lang}: ${target}`)
   }
 
-  return { warnings, skipped, generated, anchorMap }
+  return { warnings, skipped, generated, anchorMap, sections }
 }
 
 // 复制 study_guide.png（防御性，避免资源缺失）
@@ -533,7 +604,8 @@ if (en.warnings.length) console.log('警告:\n' + en.warnings.join('\n'))
 console.log('跳过章节: ' + en.skipped.join(', '))
 
 console.log('\n==== 完整方案页面 ====')
-const sol = runSolutions(zh.anchorMap, en.anchorMap)
+const enToZhMap = buildEnToZh(zh.sections, en.sections)
+const sol = runSolutions(zh.anchorMap, en.anchorMap, enToZhMap)
 console.log(`生成 ${sol.generated.length} 个方案页面`)
 if (sol.warnings.length) console.log('警告:\n' + sol.warnings.join('\n'))
 

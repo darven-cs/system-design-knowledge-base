@@ -100,13 +100,13 @@
 
 ### 用例：用户发表了一篇推特
 
-我们可以将用户自己发表的推特存储在[关系数据库](https://github.com/donnemartin/system-design-primer#relational-database-management-system-rdbms)中。我们也可以讨论一下[究竟是用 SQL 还是用 NoSQL](/topics/database#sql-还是-nosql)。
+我们可以将用户自己发表的推特存储在[关系数据库](/topics/database.md#关系型数据库管理系统rdbms)中。我们也可以讨论一下[究竟是用 SQL 还是用 NoSQL](/topics/database#sql-还是-nosql)。
 
-构建用户主页时间轴（查看关注用户的活动）以及推送推特是件麻烦事。将特推传播给所有关注者（每秒约递送 6 万条推特）这一操作有可能会使传统的[关系数据库](https://github.com/donnemartin/system-design-primer#relational-database-management-system-rdbms)超负载。因此，我们可以使用 **NoSQL 数据库**或**内存数据库**之类的更快的数据存储方式。从内存读取 1 MB 连续数据大约要花 250 微秒，而从 SSD 读取同样大小的数据要花费 4 倍的时间，从机械硬盘读取需要花费 80 倍以上的时间。<sup><a href="/topics/appendix#每个程序员都应该知道的延迟数">1</a></sup>
+构建用户主页时间轴（查看关注用户的活动）以及推送推特是件麻烦事。将特推传播给所有关注者（每秒约递送 6 万条推特）这一操作有可能会使传统的[关系数据库](/topics/database.md#关系型数据库管理系统rdbms)超负载。因此，我们可以使用 **NoSQL 数据库**或**内存数据库**之类的更快的数据存储方式。从内存读取 1 MB 连续数据大约要花 250 微秒，而从 SSD 读取同样大小的数据要花费 4 倍的时间，从机械硬盘读取需要花费 80 倍以上的时间。<sup><a href="/topics/appendix#每个程序员都应该知道的延迟数">1</a></sup>
 
 我们可以将照片、视频之类的媒体存储于**对象存储**中。
 
-* **客户端**向应用[反向代理](https://github.com/donnemartin/system-design-primer#reverse-proxy-web-server)的**Web 服务器**发送一条推特
+* **客户端**向应用[反向代理](/topics/reverse-proxy)的**Web 服务器**发送一条推特
 * **Web 服务器**将请求转发给**写 API**服务器
 * **写 API**服务器将推特使用 **SQL 数据库**存储于用户时间轴中
 * **写 API**调用**消息输出服务**，进行以下操作：

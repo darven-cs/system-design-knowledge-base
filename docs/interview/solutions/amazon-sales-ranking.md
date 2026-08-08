@@ -197,7 +197,7 @@ FOREIGN KEY(category_id) REFERENCES Categories(id)
 FOREIGN KEY(product_id) REFERENCES Products(id)
 ```
 
-我们会以 `id`、`category_id` 与 `product_id` 创建一个 [索引](https://github.com/donnemartin/system-design-primer#use-good-indices)以加快查询速度（只需要使用读取日志的时间，不再需要每次都扫描整个数据表）并让数据常驻内存。从内存读取 1 MB 连续数据大约要花 250 微秒，而从 SSD 读取同样大小的数据要花费 4 倍的时间，从机械硬盘读取需要花费 80 倍以上的时间。<sup><a href="/topics/appendix#每个程序员都应该知道的延迟数">1</a></sup>
+我们会以 `id`、`category_id` 与 `product_id` 创建一个 [索引](/topics/database.md#使用正确的索引)以加快查询速度（只需要使用读取日志的时间，不再需要每次都扫描整个数据表）并让数据常驻内存。从内存读取 1 MB 连续数据大约要花 250 微秒，而从 SSD 读取同样大小的数据要花费 4 倍的时间，从机械硬盘读取需要花费 80 倍以上的时间。<sup><a href="/topics/appendix#每个程序员都应该知道的延迟数">1</a></sup>
 
 ### 用例：用户需要根据分类浏览上周中最受欢迎的商品
 

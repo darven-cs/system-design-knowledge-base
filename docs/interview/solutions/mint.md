@@ -88,9 +88,9 @@
 
 ### 用例：用户连接到一个财务账户
 
-我们可以将 1000 万用户的信息存储在一个[关系数据库](https://github.com/donnemartin/system-design-primer#relational-database-management-system-rdbms)中。我们应该讨论一下[选择SQL或NoSQL之间的用例和权衡](https://github.com/donnemartin/system-design-primer#sql-or-nosql)了。
+我们可以将 1000 万用户的信息存储在一个[关系数据库](/topics/database.md#关系型数据库管理系统rdbms)中。我们应该讨论一下[选择SQL或NoSQL之间的用例和权衡](/topics/database.md#sql-还是-nosql)了。
 
-* **客户端** 作为一个[反向代理](https://github.com/donnemartin/system-design-primer#reverse-proxy-web-server)，发送请求到 **Web 服务器**
+* **客户端** 作为一个[反向代理](/topics/reverse-proxy)，发送请求到 **Web 服务器**
 * **Web 服务器** 转发请求到 **账户API** 服务器
 * **账户API** 服务器将新输入的账户信息更新到 **SQL数据库** 的`accounts`表
 
@@ -110,9 +110,9 @@ PRIMARY KEY(id)
 FOREIGN KEY(user_id) REFERENCES users(id)
 ```
 
-我们将在`id`，`user_id`和`created_at`等字段上创建一个[索引](https://github.com/donnemartin/system-design-primer#use-good-indices)以加速查找（对数时间而不是扫描整个表）并保持数据在内存中。从内存中顺序读取 1 MB数据花费大约250毫秒，而从SSD读取是其4倍，从磁盘读取是其80倍。<sup><a href="https://github.com/donnemartin/system-design-primer#latency-numbers-every-programmer-should-know">1</a></sup>
+我们将在`id`，`user_id`和`created_at`等字段上创建一个[索引](/topics/database.md#使用正确的索引)以加速查找（对数时间而不是扫描整个表）并保持数据在内存中。从内存中顺序读取 1 MB数据花费大约250毫秒，而从SSD读取是其4倍，从磁盘读取是其80倍。<sup><a href="/topics/appendix.md#每个程序员都应该知道的延迟数">1</a></sup>
 
-我们将使用公开的[**REST API**](https://github.com/donnemartin/system-design-primer#representational-state-transfer-rest):
+我们将使用公开的[**REST API**](/topics/communication.md#表述性状态转移rest):
 
 ```
 $ curl -X POST --data '{ "user_id": "foo", "account_url": "bar", \
@@ -120,7 +120,7 @@ $ curl -X POST --data '{ "user_id": "foo", "account_url": "bar", \
     https://mint.com/api/v1/account
 ```
 
-对于内部通信，我们可以使用[远程过程调用](https://github.com/donnemartin/system-design-primer#remote-procedure-call-rpc)。
+对于内部通信，我们可以使用[远程过程调用](/topics/communication.md#远程过程调用协议rpc)。
 
 接下来，服务从账户中提取交易。
 
@@ -137,7 +137,7 @@ $ curl -X POST --data '{ "user_id": "foo", "account_url": "bar", \
 * **客户端**向 **Web服务器** 发送请求
 * **Web服务器** 将请求转发到 **帐户API** 服务器
 * **帐户API** 服务器将job放在 **队列** 中，如 [Amazon SQS](https://aws.amazon.com/sqs/) 或者 [RabbitMQ](https://www.rabbitmq.com/)
-    * 提取交易可能需要一段时间，我们可能希望[与队列异步](https://github.com/donnemartin/system-design-primer#asynchronism)地来做，虽然这会引入额外的复杂度。
+    * 提取交易可能需要一段时间，我们可能希望[与队列异步](/topics/asynchronism)地来做，虽然这会引入额外的复杂度。
 * **交易提取服务** 执行如下操作：
     * 从 **Queue** 中拉取并从金融机构中提取给定用户的交易，将结果作为原始日志文件存储在 **对象存储区**。
     * 使用 **分类服务** 来分类每个交易
@@ -160,7 +160,7 @@ PRIMARY KEY(id)
 FOREIGN KEY(user_id) REFERENCES users(id)
 ```
 
-我们将在 `id`，`user_id`，和 `created_at`字段上创建[索引](https://github.com/donnemartin/system-design-primer#use-good-indices)。
+我们将在 `id`，`user_id`，和 `created_at`字段上创建[索引](/topics/database.md#使用正确的索引)。
 
 `monthly_spending`表应该具有如下结构：
 
@@ -174,7 +174,7 @@ PRIMARY KEY(id)
 FOREIGN KEY(user_id) REFERENCES users(id)
 ```
 
-我们将在`id`，`user_id`字段上创建[索引](https://github.com/donnemartin/system-design-primer#use-good-indices)。
+我们将在`id`，`user_id`字段上创建[索引](/topics/database.md#使用正确的索引)。
 
 #### 分类服务
 
@@ -366,7 +366,7 @@ class SpendingByCategory(MRJob):
             * 如果URL在 **SQL 数据库**中，获取该内容
                 * 以其内容更新 **内存缓存**
 
-参考 [何时更新缓存](https://github.com/donnemartin/system-design-primer#when-to-update-the-cache) 中权衡和替代的内容。以上方法描述了 [cache-aside缓存模式](https://github.com/donnemartin/system-design-primer#cache-aside).
+参考 [何时更新缓存](/topics/cache.md#何时更新缓存) 中权衡和替代的内容。以上方法描述了 [cache-aside缓存模式](/topics/cache.md#缓存模式).
 
 我们可以使用诸如 Amazon Redshift 或者 Google BigQuery 等数据仓库解决方案，而不是将`monthly_spending`聚合表保留在 **SQL 数据库** 中。
 
