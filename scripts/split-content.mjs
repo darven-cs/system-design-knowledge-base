@@ -6,7 +6,7 @@
  *
  * 用法: node scripts/split-content.mjs
  */
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync, readdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -117,6 +117,16 @@ const solutionMap = {
   query_cache: 'interview/key-value-store',
   sales_rank: 'interview/amazon-sales-ranking',
   scaling_aws: 'interview/scale-from-zero-to-millions',
+}
+
+// 面向对象设计方案：目录 -> 页面 slug
+const oodSolutionMap = {
+  hash_table: 'hash-map',
+  lru_cache: 'lru-cache',
+  call_center: 'call-center',
+  deck_of_cards: 'deck-of-cards',
+  online_chat: 'online-chat',
+  parking_lot: 'parking-lot',
 }
 
 // 被跳过的目录章节 -> 站内目标（locale 相对）或原仓库链接
@@ -264,7 +274,11 @@ function rewriteUrl(url, pagePath) {
       // 完整方案：跳转到本站方案页面
       return loc(`interview/solutions/${solutionMap[m[1]].split('/').pop()}`)
     }
-    if (t.startsWith('solutions/object_oriented_design/')) return `${GH_BLOB}/${t}`
+    if (t.startsWith('solutions/object_oriented_design/')) {
+      const m = t.match(/^solutions\/object_oriented_design\/([^/]+)\//)
+      if (m && oodSolutionMap[m[1]]) return loc(`ood/solutions/${oodSolutionMap[m[1]]}`)
+      return `${GH_BLOB}/${t}`
+    }
     return `${GH_TREE}/${t}`
   }
   if (/\.(md|ipynb|png|jpe?g|gif|svg|apkg)$/i.test(t)) return `${GH_BLOB}/${t}`
@@ -517,6 +531,55 @@ function runSolutions(zhAnchorMap, enAnchorMapArg, enToZhMap) {
   return { warnings, generated }
 }
 
+// ---------- 面向对象设计方案（solutions/object_oriented_design/*/xxx.ipynb）----------
+function notebookToMarkdown(nbPath) {
+  const nb = JSON.parse(readFileSync(nbPath, 'utf8'))
+  const markdowns = []
+  const codes = []
+  let title = null
+  for (const cell of nb.cells || []) {
+    const src = (cell.source || []).join('')
+    if (cell.cell_type === 'markdown') {
+      const t = src.trim()
+      if (!t) continue
+      // 去掉纯署名单元格（页脚已有 CC BY 署名）
+      if (t.includes('Source and license info is on GitHub')) continue
+      if (t.startsWith('# ') && !t.includes('\n')) title = t
+      else markdowns.push(t)
+    } else if (cell.cell_type === 'code') {
+      const code = src.replace(/^%%writefile[^\n]*\n?/, '').replace(/\n+$/, '')
+      codes.push('```python\n' + code + '\n```')
+    }
+  }
+  const parts = []
+  if (title) parts.push(title)
+  parts.push(...markdowns, ...codes)
+  return parts.join('\n\n') + '\n'
+}
+
+function runOOD() {
+  const generated = []
+  const warnings = []
+  for (const dir of Object.keys(oodSolutionMap)) {
+    const slug = oodSolutionMap[dir]
+    // 扫描目录下的 .ipynb 文件
+    const candDir = join(PRIMER, 'solutions', 'object_oriented_design', dir)
+    const hit = existsSync(candDir) ? readdirSync(candDir).find((f) => f.endsWith('.ipynb')) : null
+    if (!hit) {
+      warnings.push(`缺少 OOD 笔记本: ${dir}`)
+      continue
+    }
+    const text = notebookToMarkdown(join(candDir, hit))
+    for (const target of [`ood/solutions/${slug}.md`, `en/ood/solutions/${slug}.md`]) {
+      const outPath = join(DOCS, target)
+      mkdirSync(dirname(outPath), { recursive: true })
+      writeFileSync(outPath, text)
+      generated.push(target)
+    }
+  }
+  return { warnings, generated }
+}
+
 // ---------- 主流程 ----------
 function runSplit(lang, sourceFile, map, interviewMap, spec) {
   locale = lang
@@ -608,5 +671,10 @@ const enToZhMap = buildEnToZh(zh.sections, en.sections)
 const sol = runSolutions(zh.anchorMap, en.anchorMap, enToZhMap)
 console.log(`生成 ${sol.generated.length} 个方案页面`)
 if (sol.warnings.length) console.log('警告:\n' + sol.warnings.join('\n'))
+
+console.log('\n==== 面向对象设计方案 ====')
+const ood = runOOD()
+console.log(`生成 ${ood.generated.length} 个 OOD 方案页面`)
+if (ood.warnings.length) console.log('警告:\n' + ood.warnings.join('\n'))
 
 console.log('\n拆分完成 ✅')

@@ -80,6 +80,17 @@ const zh = {
         text: '面向对象设计',
         items: [{ text: '题目总览', link: '/ood/' }],
       },
+      {
+        text: '完整方案',
+        items: [
+          { text: '设计 hash map', link: '/ood/solutions/hash-map' },
+          { text: '设计 LRU 缓存', link: '/ood/solutions/lru-cache' },
+          { text: '设计呼叫中心', link: '/ood/solutions/call-center' },
+          { text: '设计一副牌', link: '/ood/solutions/deck-of-cards' },
+          { text: '设计在线聊天', link: '/ood/solutions/online-chat' },
+          { text: '设计停车场', link: '/ood/solutions/parking-lot' },
+        ],
+      },
     ],
   },
 }
@@ -160,6 +171,17 @@ const en = {
       {
         text: 'Object-Oriented Design',
         items: [{ text: 'Overview', link: '/en/ood/' }],
+      },
+      {
+        text: 'Full Solutions',
+        items: [
+          { text: 'Design a Hash Map', link: '/en/ood/solutions/hash-map' },
+          { text: 'Design an LRU Cache', link: '/en/ood/solutions/lru-cache' },
+          { text: 'Design a Call Center', link: '/en/ood/solutions/call-center' },
+          { text: 'Design a Deck of Cards', link: '/en/ood/solutions/deck-of-cards' },
+          { text: 'Design an Online Chat', link: '/en/ood/solutions/online-chat' },
+          { text: 'Design a Parking Lot', link: '/en/ood/solutions/parking-lot' },
+        ],
       },
     ],
   },

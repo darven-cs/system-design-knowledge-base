@@ -8,11 +8,11 @@
 
 | Question | |
 |---|---|
-| Design a hash map | [Solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/object_oriented_design/hash_table/hash_map.ipynb)  |
-| Design a least recently used cache | [Solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/object_oriented_design/lru_cache/lru_cache.ipynb)  |
-| Design a call center | [Solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/object_oriented_design/call_center/call_center.ipynb)  |
-| Design a deck of cards | [Solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/object_oriented_design/deck_of_cards/deck_of_cards.ipynb)  |
-| Design a parking lot | [Solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/object_oriented_design/parking_lot/parking_lot.ipynb)  |
-| Design a chat server | [Solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/object_oriented_design/online_chat/online_chat.ipynb)  |
+| Design a hash map | [Solution](/en/ood/solutions/hash-map)  |
+| Design a least recently used cache | [Solution](/en/ood/solutions/lru-cache)  |
+| Design a call center | [Solution](/en/ood/solutions/call-center)  |
+| Design a deck of cards | [Solution](/en/ood/solutions/deck-of-cards)  |
+| Design a parking lot | [Solution](/en/ood/solutions/parking-lot)  |
+| Design a chat server | [Solution](/en/ood/solutions/online-chat)  |
 | Design a circular array | [Contribute](https://github.com/donnemartin/system-design-primer/blob/master/CONTRIBUTING.md)  |
 | Add an object-oriented design question | [Contribute](https://github.com/donnemartin/system-design-primer/blob/master/CONTRIBUTING.md) |
