@@ -1,3 +1,5 @@
-# 设计 Pastebin / Bit.ly
+# 设计 Pastebin.com (或者 Bit.ly)
 
-> 内容整理中，稍后从《System Design Primer》拆分填充。
+[查看实践与解答](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md)
+
+![Imgur](/images/4edXG0T.png)

@@ -9,6 +9,7 @@ const zh = {
     { text: '学习指引', link: '/guide/' },
     { text: '系统设计主题', link: '/topics/' },
     { text: '面试题与解答', link: '/interview/' },
+    { text: '面向对象设计', link: '/ood/' },
   ],
   sidebar: {
     '/guide/': [
@@ -61,6 +62,12 @@ const zh = {
         ],
       },
     ],
+    '/ood/': [
+      {
+        text: '面向对象设计',
+        items: [{ text: '题目总览', link: '/ood/' }],
+      },
+    ],
   },
 }
 
@@ -70,6 +77,7 @@ const en = {
     { text: 'Guide', link: '/en/guide/' },
     { text: 'Topics', link: '/en/topics/' },
     { text: 'Interviews', link: '/en/interview/' },
+    { text: 'OOD', link: '/en/ood/' },
   ],
   sidebar: {
     '/en/guide/': [
@@ -120,6 +128,12 @@ const en = {
           { text: 'Amazon Sales Ranking', link: '/en/interview/amazon-sales-ranking' },
           { text: 'Scale to Millions of Users', link: '/en/interview/scale-from-zero-to-millions' },
         ],
+      },
+    ],
+    '/en/ood/': [
+      {
+        text: 'Object-Oriented Design',
+        items: [{ text: 'Overview', link: '/en/ood/' }],
       },
     ],
   },

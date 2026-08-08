@@ -1,3 +1,5 @@
 # Design Mint.com
 
-> Content pending — will be split from The System Design Primer.
+[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/mint/README.md)
+
+![Imgur](/images/V5q57vU.png)

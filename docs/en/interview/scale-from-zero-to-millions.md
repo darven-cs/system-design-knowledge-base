@@ -1,3 +1,5 @@
-# Scale to Millions of Users
+# Design a system that scales to millions of users on AWS
 
-> Content pending — will be split from The System Design Primer.
+[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/scaling_aws/README.md)
+
+![Imgur](/images/jj3A5N8.png)

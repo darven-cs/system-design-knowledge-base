@@ -2,7 +2,7 @@
 
 > 16 个核心主题，涵盖各种系统设计知识点及其优缺点 —— **一切皆是取舍**。
 >
-> 内容整理中，稍后从《System Design Primer》拆分填充。
+> 内容源自《System Design Primer》（CC BY 4.0）。
 
 - [性能与可扩展性](/topics/performance-vs-scalability)
 - [延迟与吞吐量](/topics/latency-vs-throughput)

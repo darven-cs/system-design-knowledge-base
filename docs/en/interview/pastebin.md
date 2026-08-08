@@ -1,3 +1,5 @@
-# Design Pastebin / Bit.ly
+# Design Pastebin.com (or Bit.ly)
 
-> Content pending — will be split from The System Design Primer.
+[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md)
+
+![Imgur](/images/4edXG0T.png)

@@ -1,3 +1,5 @@
-# KV Store for a Search Engine
+# Design a key-value store for a search engine
 
-> Content pending — will be split from The System Design Primer.
+[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/query_cache/README.md)
+
+![Imgur](/images/4j99mhe.png)

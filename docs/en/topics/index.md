@@ -2,7 +2,7 @@
 
 > 16 core topics covering system design knowledge and trade-offs — **Everything is a trade-off**.
 >
-> Content pending — will be split from The System Design Primer.
+> Content adapted from The System Design Primer (CC BY 4.0).
 
 - [Performance vs Scalability](/en/topics/performance-vs-scalability)
 - [Latency vs Throughput](/en/topics/latency-vs-throughput)

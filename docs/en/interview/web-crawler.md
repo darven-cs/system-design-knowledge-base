@@ -1,3 +1,5 @@
-# Design a Web Crawler
+# Design a web crawler
 
-> Content pending — will be split from The System Design Primer.
+[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/web_crawler/README.md)
+
+![Imgur](/images/bWxPtQA.png)

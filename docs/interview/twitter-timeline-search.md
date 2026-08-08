@@ -1,3 +1,5 @@
-# 设计 Twitter 时间线
+# 设计 Twitter 时间线和搜索 (或者 Facebook feed 和搜索)
 
-> 内容整理中，稍后从《System Design Primer》拆分填充。
+[查看实践与解答](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/twitter/README.md)
+
+![Imgur](/images/jrUBAF7.png)

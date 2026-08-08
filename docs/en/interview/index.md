@@ -1,14 +1,14 @@
-# Interview Q&A
+# System design interview questions with solutions
 
-> 8 classic system design interview questions with full solutions, code, and diagrams.
+> Common system design interview questions with sample discussions, code, and diagrams.
 >
-> Content pending — will be split from The System Design Primer.
+> Solutions linked to content in the `solutions/` folder.
 
-- [Design Pastebin / Bit.ly](/en/interview/pastebin)
-- [Design Twitter Timeline](/en/interview/twitter-timeline-search)
-- [Design a Web Crawler](/en/interview/web-crawler)
+- [Design Pastebin.com (or Bit.ly)](/en/interview/pastebin)
+- [Design the Twitter timeline and search (or Facebook feed and search)](/en/interview/twitter-timeline-search)
+- [Design a web crawler](/en/interview/web-crawler)
 - [Design Mint.com](/en/interview/mint)
-- [Social Network Data Structures](/en/interview/social-network-data-structures)
-- [KV Store for a Search Engine](/en/interview/key-value-store)
-- [Amazon Sales Ranking](/en/interview/amazon-sales-ranking)
-- [Scale to Millions of Users](/en/interview/scale-from-zero-to-millions)
+- [Design the data structures for a social network](/en/interview/social-network-data-structures)
+- [Design a key-value store for a search engine](/en/interview/key-value-store)
+- [Design Amazon's sales ranking by category feature](/en/interview/amazon-sales-ranking)
+- [Design a system that scales to millions of users on AWS](/en/interview/scale-from-zero-to-millions)

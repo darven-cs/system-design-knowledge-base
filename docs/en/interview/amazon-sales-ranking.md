@@ -1,3 +1,5 @@
-# Amazon Sales Ranking
+# Design Amazon's sales ranking by category feature
 
-> Content pending — will be split from The System Design Primer.
+[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/sales_rank/README.md)
+
+![Imgur](/images/MzExP06.png)

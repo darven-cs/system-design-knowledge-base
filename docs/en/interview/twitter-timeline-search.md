@@ -1,3 +1,5 @@
-# Design Twitter Timeline
+# Design the Twitter timeline and search (or Facebook feed and search)
 
-> Content pending — will be split from The System Design Primer.
+[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/twitter/README.md)
+
+![Imgur](/images/jrUBAF7.png)

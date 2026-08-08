@@ -1,3 +1,5 @@
-# 搜索引擎 KV 存储
+# 为搜索引擎设计一个 key-value 储存
 
-> 内容整理中，稍后从《System Design Primer》拆分填充。
+[查看实践与解答](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/query_cache/README.md)
+
+![Imgur](/images/4j99mhe.png)

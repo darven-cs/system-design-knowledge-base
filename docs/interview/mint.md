@@ -1,3 +1,5 @@
 # 设计 Mint.com
 
-> 内容整理中，稍后从《System Design Primer》拆分填充。
+[查看实践与解答](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/mint/README.md)
+
+![Imgur](/images/V5q57vU.png)
