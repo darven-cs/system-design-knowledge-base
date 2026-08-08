@@ -1,5 +1,5 @@
 # 设计 Mint.com
 
-[查看实践与解答](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/mint/README.md)
+[查看实践与解答](/interview/solutions/mint)
 
 ![Imgur](/images/V5q57vU.png)

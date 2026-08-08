@@ -1,5 +1,5 @@
 # Design the Twitter timeline and search (or Facebook feed and search)
 
-[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/twitter/README.md)
+[View exercise and solution](/en/interview/solutions/twitter-timeline-search)
 
 ![Imgur](/images/jrUBAF7.png)

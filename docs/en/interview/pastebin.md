@@ -1,5 +1,5 @@
 # Design Pastebin.com (or Bit.ly)
 
-[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md)
+[View exercise and solution](/en/interview/solutions/pastebin)
 
 ![Imgur](/images/4edXG0T.png)

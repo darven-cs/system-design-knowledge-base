@@ -1,5 +1,5 @@
 # Design a web crawler
 
-[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/web_crawler/README.md)
+[View exercise and solution](/en/interview/solutions/web-crawler)
 
 ![Imgur](/images/bWxPtQA.png)

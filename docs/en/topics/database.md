@@ -32,7 +32,7 @@ The master serves reads and writes, replicating writes to one or more slaves, wh
 #### Disadvantage(s): master-slave replication
 
 * Additional logic is needed to promote a slave to a master.
-* See **Disadvantage(s): replication** for points related to **both** master-slave and master-master.
+* See [Disadvantage(s): replication](#disadvantages-replication) for points related to **both** master-slave and master-master.
 
 ### Master-master replication
 
@@ -49,7 +49,7 @@ Both masters serve reads and writes and coordinate with each other on writes.  I
 * You'll need a load balancer or you'll need to make changes to your application logic to determine where to write.
 * Most master-master systems are either loosely consistent (violating ACID) or have increased write latency due to synchronization.
 * Conflict resolution comes more into play as more write nodes are added and as latency increases.
-* See **Disadvantage(s): replication** for points related to **both** master-slave and master-master.
+* See [Disadvantage(s): replication](#disadvantages-replication) for points related to **both** master-slave and master-master.
 
 #### Disadvantage(s): replication
 

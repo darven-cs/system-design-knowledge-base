@@ -26,10 +26,10 @@
 
 ## 第三步：设计核心组件
 
-对每一个核心组件进行详细深入的分析。举例来说，如果你被问到[设计一个 url 缩写服务](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md)，开始讨论：
+对每一个核心组件进行详细深入的分析。举例来说，如果你被问到[设计一个 url 缩写服务](/interview/solutions/pastebin)，开始讨论：
 
 * 生成并储存一个完整 url 的 hash
-    * [MD5](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md) 和 [Base62](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md)
+    * [MD5](/interview/solutions/pastebin) 和 [Base62](/interview/solutions/pastebin)
     * Hash 碰撞
     * SQL 还是 NoSQL
     * 数据库模型

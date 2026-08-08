@@ -1,5 +1,5 @@
 # Design the data structures for a social network
 
-[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/social_graph/README.md)
+[View exercise and solution](/en/interview/solutions/social-network-data-structures)
 
 ![Imgur](/images/cdCv5g7.png)

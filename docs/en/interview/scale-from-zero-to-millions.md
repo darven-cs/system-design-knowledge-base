@@ -1,5 +1,5 @@
 # Design a system that scales to millions of users on AWS
 
-[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/scaling_aws/README.md)
+[View exercise and solution](/en/interview/solutions/scale-from-zero-to-millions)
 
 ![Imgur](/images/jj3A5N8.png)

@@ -61,6 +61,19 @@ const zh = {
           { text: '百万用户级系统', link: '/interview/scale-from-zero-to-millions' },
         ],
       },
+      {
+        text: '完整方案',
+        items: [
+          { text: 'Pastebin / Bit.ly', link: '/interview/solutions/pastebin' },
+          { text: 'Twitter 时间线', link: '/interview/solutions/twitter-timeline-search' },
+          { text: '网页爬虫', link: '/interview/solutions/web-crawler' },
+          { text: 'Mint.com', link: '/interview/solutions/mint' },
+          { text: '社交网络数据结构', link: '/interview/solutions/social-network-data-structures' },
+          { text: '搜索引擎 KV 存储', link: '/interview/solutions/key-value-store' },
+          { text: 'Amazon 销售排名', link: '/interview/solutions/amazon-sales-ranking' },
+          { text: '百万用户级系统', link: '/interview/solutions/scale-from-zero-to-millions' },
+        ],
+      },
     ],
     '/ood/': [
       {
@@ -127,6 +140,19 @@ const en = {
           { text: 'KV Store for a Search Engine', link: '/en/interview/key-value-store' },
           { text: 'Amazon Sales Ranking', link: '/en/interview/amazon-sales-ranking' },
           { text: 'Scale to Millions of Users', link: '/en/interview/scale-from-zero-to-millions' },
+        ],
+      },
+      {
+        text: 'Full Solutions',
+        items: [
+          { text: 'Pastebin / Bit.ly', link: '/en/interview/solutions/pastebin' },
+          { text: 'Twitter Timeline', link: '/en/interview/solutions/twitter-timeline-search' },
+          { text: 'Web Crawler', link: '/en/interview/solutions/web-crawler' },
+          { text: 'Mint.com', link: '/en/interview/solutions/mint' },
+          { text: 'Social Network Data Structures', link: '/en/interview/solutions/social-network-data-structures' },
+          { text: 'KV Store for a Search Engine', link: '/en/interview/solutions/key-value-store' },
+          { text: 'Amazon Sales Ranking', link: '/en/interview/solutions/amazon-sales-ranking' },
+          { text: 'Scale to Millions of Users', link: '/en/interview/solutions/scale-from-zero-to-millions' },
         ],
       },
     ],

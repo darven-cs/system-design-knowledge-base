@@ -209,7 +209,7 @@ function buildAnchorMap(sections, map, interviewMap, special) {
       continue
     }
     for (const line of sec.lines) {
-      const m = line.match(/^(#{1,4})\s+(.+?)\s*$/)
+      const m = line.match(/^(#{1,6})\s+(.+?)\s*$/)
       if (m) add(slugify(m[2]), cfg.target, m[1].length === 2)
     }
   }
@@ -261,8 +261,8 @@ function rewriteUrl(url, pagePath) {
   if (t.startsWith('solutions/')) {
     const m = t.match(/^solutions\/system_design\/([^/]+)\/README/i)
     if (m && solutionMap[m[1]]) {
-      // 面试题页内指向完整方案 -> 原仓库；索引页 -> 本站
-      return pagePath.includes('interview/index.md') ? loc(solutionMap[m[1]]) : `${GH_BLOB}/${t}`
+      // 完整方案：跳转到本站方案页面
+      return loc(`interview/solutions/${solutionMap[m[1]].split('/').pop()}`)
     }
     if (t.startsWith('solutions/object_oriented_design/')) return `${GH_BLOB}/${t}`
     return `${GH_TREE}/${t}`
@@ -358,6 +358,94 @@ function assemble(target, contributions) {
     .join('\n\n') + '\n'
 }
 
+// ---------- 完整方案页面（solutions/system_design/*/README）----------
+function rewriteSolutionUrl(url, pagePath) {
+  const t = url.trim()
+  if (/^[a-z]+:\/\//i.test(t) || t.startsWith('mailto:')) {
+    // 指回主 README 的锚点链接 → 本地主题页
+    const m = t.match(
+      /^https:\/\/github\.com\/donnemartin\/system-design-primer\/blob\/master\/README(?:-zh-Hans)?\.md#(.+)$/
+    )
+    if (m) {
+      const slug = m[1]
+      const sp = special(slug)
+      if (sp) return sp.startsWith('http') ? sp : loc(sp)
+      const entries = anchorMap[slug]
+      if (entries && entries.length) {
+        const e = entries[0]
+        const base = e.page.replace(/\.md$/, '')
+        return e.isPageTitle ? loc(base) : `${loc(base)}#${slug}`
+      }
+    }
+    return t // 其它外部链接保留
+  }
+  if (t.startsWith('#')) return t // 方案文档内本地锚点保留
+  if (t.startsWith('images/')) return '/images/' + t.slice('images/'.length)
+  // 兄弟方案 README（如 ../scaling_aws/README.md）→ 本地方案页
+  const m2 = t.match(/^\.\.\/([a-z_]+)\/README\.md$/)
+  if (m2 && solutionMap[m2[1]]) return loc(`interview/solutions/${solutionMap[m2[1]].split('/').pop()}`)
+  return t
+}
+
+function rewriteSolutionLine(line, pagePath) {
+  let s = line
+  s = s.replace(/<[^>]+>/g, (tag) => {
+    return tag.replace(/(\s[a-zA-Z_:][\w.:-]*)=([^\s"'<>`]+)/g, '$1="$2"')
+  })
+  s = s.replace(/<([a-zA-Z][a-zA-Z0-9]*)((?:\s[^<>]*?)?)\/>/g, (m, name, attrs) => {
+    return VOID_ELEMENTS.has(name.toLowerCase()) ? m : `<${name}${attrs}>`
+  })
+  s = s.replace(/<img([^>]*)src="([^"]+)"([^>]*)>/gi, (m, pre, src, post) => {
+    return `<img${pre}src="${rewriteSolutionUrl(src, pagePath)}"${post}>`
+  })
+  s = s.replace(/<a([^>]*)href="([^"]+)"([^>]*)>/gi, (m, pre, href, post) => {
+    return `<a${pre}href="${rewriteSolutionUrl(href, pagePath)}"${post}>`
+  })
+  s = s.replace(/\]\(([^)]+)\)/g, (m, url) => `](${rewriteSolutionUrl(url, pagePath)})`)
+  return s
+}
+
+function rewriteSolutionDoc(text, pagePath) {
+  const out = []
+  let inFence = false
+  for (const line of text.split('\n')) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence
+      out.push(line)
+      continue
+    }
+    out.push(inFence ? line : rewriteSolutionLine(line, pagePath))
+  }
+  return out.join('\n')
+}
+
+function runSolutions(zhAnchorMap, enAnchorMap) {
+  const generated = []
+  const warnings = []
+  for (const dir of Object.keys(solutionMap)) {
+    const slug = solutionMap[dir].split('/').pop()
+    const jobs = [
+      ['zh', 'README-zh-Hans.md', `interview/solutions/${slug}.md`, zhAnchorMap],
+      ['en', 'README.md', `en/interview/solutions/${slug}.md`, enAnchorMap],
+    ]
+    for (const [lang, file, target, amap] of jobs) {
+      const src = join(PRIMER, 'solutions', 'system_design', dir, file)
+      if (!existsSync(src)) {
+        warnings.push(`缺少方案文件: ${src}`)
+        continue
+      }
+      locale = lang
+      anchorMap = amap
+      const text = rewriteSolutionDoc(readFileSync(src, 'utf8'), target)
+      const outPath = join(DOCS, target)
+      mkdirSync(dirname(outPath), { recursive: true })
+      writeFileSync(outPath, text)
+      generated.push(`${lang}: ${target}`)
+    }
+  }
+  return { warnings, generated }
+}
+
 // ---------- 主流程 ----------
 function runSplit(lang, sourceFile, map, interviewMap, spec) {
   locale = lang
@@ -422,7 +510,7 @@ function runSplit(lang, sourceFile, map, interviewMap, spec) {
     generated.push(`${lang}: ${target}`)
   }
 
-  return { warnings, skipped, generated }
+  return { warnings, skipped, generated, anchorMap }
 }
 
 // 复制 study_guide.png（防御性，避免资源缺失）
@@ -443,5 +531,10 @@ const en = runSplit('en', 'README.md', enMap, enInterview, enSpecial)
 console.log(`生成 ${en.generated.length} 个文件, 跳过 ${en.skipped.length} 个章节`)
 if (en.warnings.length) console.log('警告:\n' + en.warnings.join('\n'))
 console.log('跳过章节: ' + en.skipped.join(', '))
+
+console.log('\n==== 完整方案页面 ====')
+const sol = runSolutions(zh.anchorMap, en.anchorMap)
+console.log(`生成 ${sol.generated.length} 个方案页面`)
+if (sol.warnings.length) console.log('警告:\n' + sol.warnings.join('\n'))
 
 console.log('\n拆分完成 ✅')

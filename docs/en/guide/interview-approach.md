@@ -28,10 +28,10 @@ Outline a high level design with all important components.
 
 ## Step 3: Design core components
 
-Dive into details for each core component.  For example, if you were asked to [design a url shortening service](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md), discuss:
+Dive into details for each core component.  For example, if you were asked to [design a url shortening service](/en/interview/solutions/pastebin), discuss:
 
 * Generating and storing a hash of the full url
-    * [MD5](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md) and [Base62](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/pastebin/README.md)
+    * [MD5](/en/interview/solutions/pastebin) and [Base62](/en/interview/solutions/pastebin)
     * Hash collisions
     * SQL or NoSQL
     * Database schema

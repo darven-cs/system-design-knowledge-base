@@ -1,5 +1,5 @@
 # Design Amazon's sales ranking by category feature
 
-[View exercise and solution](https://github.com/donnemartin/system-design-primer/blob/master/solutions/system_design/sales_rank/README.md)
+[View exercise and solution](/en/interview/solutions/amazon-sales-ranking)
 
 ![Imgur](/images/MzExP06.png)
