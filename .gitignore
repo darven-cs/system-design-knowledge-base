@@ -1,0 +1,11 @@
+# Dependencies
+node_modules
+
+# VitePress build output
+docs/.vitepress/dist
+docs/.vitepress/cache
+
+# Misc
+.DS_Store
+*.log
+npm-debug.log*
