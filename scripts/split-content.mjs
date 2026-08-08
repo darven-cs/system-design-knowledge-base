@@ -6,7 +6,8 @@
  *
  * 用法: node scripts/split-content.mjs
  */
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync, readdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from 'node:fs'
+import { oodContent } from './ood-content.mjs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -531,46 +532,39 @@ function runSolutions(zhAnchorMap, enAnchorMapArg, enToZhMap) {
   return { warnings, generated }
 }
 
-// ---------- 面向对象设计方案（solutions/object_oriented_design/*/xxx.ipynb）----------
-function notebookToMarkdown(nbPath) {
-  const nb = JSON.parse(readFileSync(nbPath, 'utf8'))
-  const markdowns = []
-  const codes = []
-  let title = null
-  for (const cell of nb.cells || []) {
-    const src = (cell.source || []).join('')
-    if (cell.cell_type === 'markdown') {
-      const t = src.trim()
-      if (!t) continue
-      // 去掉纯署名单元格（页脚已有 CC BY 署名）
-      if (t.includes('Source and license info is on GitHub')) continue
-      if (t.startsWith('# ') && !t.includes('\n')) title = t
-      else markdowns.push(t)
-    } else if (cell.cell_type === 'code') {
-      const code = src.replace(/^%%writefile[^\n]*\n?/, '').replace(/\n+$/, '')
-      codes.push('```python\n' + code + '\n```')
-    }
+// ---------- 面向对象设计方案（基于 ood-content.mjs：中英 + Python/Go/Java 三语言）----------
+const codeLangLabel = { python: 'Python', go: 'Go', java: 'Java' }
+
+function renderOODPage(data) {
+  const render = (locale) => {
+    const l = data[locale]
+    // VitePress 内置 code-group 容器语法，Tab 标题用栅栏 info 的 [标题] 指定
+    const blocks = Object.entries(data.code).map(([lang, code]) => {
+      const body = code.trim()
+      return '```' + lang + ' [' + codeLangLabel[lang] + ']\n' + body + '\n```'
+    })
+    const codeGroup = '::: code-group\n\n' + blocks.join('\n\n') + '\n\n:::'
+    return (
+      `# ${l.title}\n\n` +
+      `> 源自《The System Design Primer》OOD 方案（Donne Martin, CC BY 4.0），代码提供 Python / Go / Java 三种实现。\n\n` +
+      `${l.prose}\n\n` +
+      `## ${locale === 'zh' ? '方案' : 'Solution'}\n\n` +
+      `${codeGroup}\n`
+    )
   }
-  const parts = []
-  if (title) parts.push(title)
-  parts.push(...markdowns, ...codes)
-  return parts.join('\n\n') + '\n'
+  return { zh: render('zh'), en: render('en') }
 }
 
 function runOOD() {
   const generated = []
   const warnings = []
-  for (const dir of Object.keys(oodSolutionMap)) {
-    const slug = oodSolutionMap[dir]
-    // 扫描目录下的 .ipynb 文件
-    const candDir = join(PRIMER, 'solutions', 'object_oriented_design', dir)
-    const hit = existsSync(candDir) ? readdirSync(candDir).find((f) => f.endsWith('.ipynb')) : null
-    if (!hit) {
-      warnings.push(`缺少 OOD 笔记本: ${dir}`)
-      continue
-    }
-    const text = notebookToMarkdown(join(candDir, hit))
-    for (const target of [`ood/solutions/${slug}.md`, `en/ood/solutions/${slug}.md`]) {
+  for (const [slug, data] of Object.entries(oodContent)) {
+    const { zh, en } = renderOODPage(data)
+    const jobs = [
+      ['zh', `ood/solutions/${slug}.md`, zh],
+      ['en', `en/ood/solutions/${slug}.md`, en],
+    ]
+    for (const [, target, text] of jobs) {
       const outPath = join(DOCS, target)
       mkdirSync(dirname(outPath), { recursive: true })
       writeFileSync(outPath, text)
